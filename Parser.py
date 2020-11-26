@@ -1,14 +1,18 @@
 import os
 import glob
-import re
-from os.path import basename, splitext
 
 
 def parser():
     # Creation du repertoire pour les fichiers .txt
     os.system("rm -r ParsedPapers")
     os.system("mkdir ParsedPapers")
-    listePDF=getName()
+    listePDF = []
+    liste = glob.glob("Papers/*.pdf")
+
+    for j in liste:
+        l = j.strip("Papers/")
+        listePDF.append(l)
+
     for i in listePDF:
         i = i[1:]
         toConvert = i
@@ -18,30 +22,22 @@ def parser():
         os.system(command)
         fr = open(converted, "r+")
         
-        # Name
+        # Nom
         parsed = "ParsedPapers/" + i + "Parsed.txt"
         fw = open(parsed, 'w+')
         fw.write(i)
         
-        # Title
+        # Titre
         titre = fr.readline()
         fw.write(titre)
 
         # Abstract
         abstract = fr.read()
-        debutAbstract = (abstract.find("Abstract"))
-        finAbstract = (abstract.find("\n\n", debutAbstract))
-        substring = abstract[debutAbstract:finAbstract]
+        debut = (abstract.find("Abstract"))
+        fin = (abstract.find("\n\n", debut))
+        substring = abstract[debut:fin]
         fw.write(substring)
         fw.close()
-
-def getName():
-    listePDF=[]
-    liste = glob.glob("Papers/*.pdf")
-    for i in liste:
-        l = i.strip("Papers/")
-        listePDF.append(l)
-    return(listePDF)
 
 def main():
     parser()
