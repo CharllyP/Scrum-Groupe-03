@@ -6,26 +6,25 @@ def parser():
     # Creation du repertoire pour les fichiers .txt
     os.system("rm -r ParsedPapers")
     os.system("mkdir ParsedPapers")
-    listePDF = []
-    liste = glob.glob("Papers/*.pdf")
 
-    for j in liste:
-        l = j.strip("Papers/")
-        listePDF.append(l)
+    listePDF = glob.glob("Papers/*.pdf")
+    print(listePDF)
 
     for i in listePDF:
-        i = i[1:]
         toConvert = i
-        converted = "ParsedPapers/" + i + ".txt"
-        converted = converted.replace(' ', '\ ')
+        print(i)
+        converted = i + ".txt"
+        os.system("touch "+ converted)
         command = "pdftotext " + toConvert + " " + converted
+        print(command)
         os.system(command)
         fr = open(converted, "r+")
         
         # Nom
-        parsed = "ParsedPapers/" + i + "Parsed.txt"
+        iStripped = i.strip("Papers/")
+        parsed = "ParsedPapers/" + iStripped + "Parsed.txt"
         fw = open(parsed, 'w+')
-        fw.write(i)
+        fw.write(iStripped+ "\n")
         
         # Titre
         titre = fr.readline()
