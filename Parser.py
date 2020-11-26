@@ -1,5 +1,6 @@
 import os
 import glob
+import sys
 
 
 def parser():
@@ -7,21 +8,19 @@ def parser():
     os.system("rm -r ParsedPapers")
     os.system("mkdir ParsedPapers")
 
-    listePDF = glob.glob("Papers/*.pdf")
-    print(listePDF)
+    dossierSource = sys.argv[1]
+    listePDF = glob.glob(dossierSource+"*.pdf")
 
     for i in listePDF:
         toConvert = i
-        print(i)
         converted = i + ".txt"
         os.system("touch "+ converted)
         command = "pdftotext " + toConvert + " " + converted
-        print(command)
         os.system(command)
         fr = open(converted, "r+")
         
         # Nom
-        iStripped = i.strip("Papers/")
+        iStripped = i.strip(dossierSource)
         parsed = "ParsedPapers/" + iStripped + "Parsed.txt"
         fw = open(parsed, 'w+')
         fw.write(iStripped+ "\n")
