@@ -28,10 +28,10 @@ def parser():
         fw.write(titre)
 
         # Abstract
-        content = fr.read()
-        debutAbstract = (content.find("Abstract"))
-        finAbstract = (content.find("\n\n", debutAbstract))
-        substring = content[debutAbstract:finAbstract]
+        abstract = fr.read()
+        debutAbstract = (abstract.find("Abstract"))
+        finAbstract = (abstract.find("\n\n", debutAbstract))
+        substring = abstract[debutAbstract:finAbstract]
         fw.write(substring)
         fw.close()
 
