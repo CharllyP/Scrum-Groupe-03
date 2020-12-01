@@ -56,7 +56,46 @@ def parser():
             fw.close()
 
     elif(option == "-x"):
-        print("xml")
+        for i in listePDF:
+            toConvert = i
+            converted = i + ".txt"
+            os.system("touch "+ converted)
+            command = "pdftotext " + toConvert + " " + converted
+            os.system(command)
+            fr = open(converted, "r+")
+
+            # Nom
+            iStripped = i.strip(dossierSource)
+            parsed = "ParsedPapers/" + iStripped + "Parsed.xml"
+            fw = open(parsed, 'w+')
+            fw.write("<article>\n<preamble>"+iStripped+ "</preamble>\n")
+
+            # Titre
+            titre = fr.readline()
+            fw.write("<titre>"+titre+"</titre>\n")
+
+            read = fr.read()
+
+            # Authors
+            substring = read.lstrip(titre)
+            substring = substring.strip()
+            fin = (read.find("Abstract"))
+            substring = read[:fin]
+            fw.write("<auteur>"+substring+"</auteur>\n")
+
+
+            # Abstract
+            debut = (read.find("Abstract"))
+            fin = (read.find("\n\n", debut))
+            substring = read[debut:fin]
+            fw.write("<abstract>"+substring+"</abstract>\n")
+
+            # References
+            debut = (read.find("References"))
+            substring = read[debut:]
+            fw.write("<biblio>"+substring+"</biblio>\n</article>")
+
+            fw.close()
     else:
         print("Option inconnue !")
 
