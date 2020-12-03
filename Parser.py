@@ -13,6 +13,26 @@ def parser():
     listePDF = glob.glob(dossierSource+"*.pdf")
     option = sys.argv[1]
 
+    j = 1
+    for i in listePDF:
+        print(j, end="")
+        print(" - "+i)
+        j += 1
+
+    print("Entrez le numero du fichier que vous ne voulez pas parser (pour finir les suppressions entrez '0'):")
+    k = int(input())
+    k -= 1
+    while k != -1 :
+        listePDF.pop(k)
+        j = 0
+        for i in listePDF:
+            print(j, end="")
+            print(" - " + i)
+            j += 1
+        print("Entrez le numero du fichier que vous ne voulez pas parser (pour finir les suppressions entrez '0'):")
+        k = int(input())
+        k -= 1
+
     if(option == "-t"):
         for i in listePDF:
             toConvert = i
@@ -31,7 +51,6 @@ def parser():
             # Titre
             titre = fr.readline()
             fw.write(titre + "\n\n")
-
             read = fr.read()
 
             # Authors
@@ -105,7 +124,6 @@ def parser():
             # Titre
             titre = fr.readline()
             fw.write("<titre>"+titre+"</titre>\n")
-
             read = fr.read()
 
             # Authors
@@ -113,7 +131,6 @@ def parser():
             fin = (read.find("Abstract"))
             substring = read[:fin]
             fw.write("<auteur>"+substring+"</auteur>\n")
-
 
             # Abstract
             debut = (read.find("Abstract"))
