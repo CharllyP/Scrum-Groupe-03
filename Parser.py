@@ -52,7 +52,15 @@ def parser():
             substring = substring.strip("Introduction\n")
             fin = (substring.find("\n\n"))
             substring = substring[:fin]
-            substring = "Introduction\n" + substring
+            substringIntro = "Introduction\n" + substring
+            fw.write(substringIntro + "\n\n")
+
+            # Corps
+            debut = (read.find("Introduction"))
+            fin = (read.find("Conclusion"))
+            substring = read[debut:fin]
+            substring = substring.strip(substringIntro)
+            substring = "Corps\n" + substring
             fw.write(substring + "\n\n")
 
             # Conclusion
@@ -111,8 +119,17 @@ def parser():
             substring = substring.strip("Introduction\n")
             fin = (substring.find("\n\n"))
             substring = substring[:fin]
-            substring = "Introduction\n" + substring
-            fw.write("<introduction>"+substring + "</introduction>\n")
+            substringIntro = "Introduction\n" + substring
+            fw.write("<introduction>"+ substringIntro + "</introduction>\n")
+
+            # Corps
+            debut = (read.find("Introduction"))
+            fin = (read.find("Conclusion"))
+            substring = read[debut:fin]
+            substring = substring.strip(substringIntro)
+            substring = "Corps\n" + substring
+            substring = substring.replace("<", "(")
+            fw.write("<corps>" + substring + "</corps>\n")
 
             # Conclusion
             debut = (read.find("Conclusion\n"))
@@ -121,12 +138,12 @@ def parser():
             fin = (substring.find("\n\n"))
             substring = substring[:fin]
             substring = "Conclusion\n" + substring
-            fw.write("<conclusion>" + substring + "</conclusion>\n\n")
+            fw.write("<conclusion>" + substring + "</conclusion>\n")
 
             # References
             debut = (read.find("References"))
             substring = read[debut:]
-            fw.write("<biblio>"+substring+"</biblio>\n</article>")
+            fw.write("<biblio>"+substring+"</biblio>\n</article>\n")
 
             fw.close()
     else:
