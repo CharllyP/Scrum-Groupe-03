@@ -26,11 +26,11 @@ def parser():
             iStripped = i.strip(dossierSource)
             parsed = "ParsedPapers/" + iStripped + "Parsed.txt"
             fw = open(parsed, 'w+')
-            fw.write(iStripped + "\n")
+            fw.write(iStripped + "\n\n")
 
             # Titre
             titre = fr.readline()
-            fw.write(titre + "\n")
+            fw.write(titre + "\n\n")
 
             read = fr.read()
 
@@ -38,13 +38,13 @@ def parser():
             substring = read.lstrip(titre)
             fin = (read.find("Abstract"))
             substring = read[:fin]
-            fw.write(substring + "\n")
+            fw.write(substring + "\n\n")
 
             # Abstract
             debut = (read.find("Abstract"))
             fin = (read.find("\n\n", debut))
             substring = read[debut:fin]
-            fw.write(substring + "\n")
+            fw.write(substring + "\n\n")
 
             # Introduction
             debut = (read.find("Introduction\n"))
@@ -53,12 +53,21 @@ def parser():
             fin = (substring.find("\n\n"))
             substring = substring[:fin]
             substring = "Introduction\n" + substring
-            fw.write(substring + "\n")
+            fw.write(substring + "\n\n")
+
+            # Conclusion
+            debut = (read.find("Conclusion\n"))
+            substring = read[debut:]
+            substring = substring.strip("Conclusion\n")
+            fin = (substring.find("\n\n"))
+            substring = substring[:fin]
+            substring = "Conclusion\n" + substring
+            fw.write(substring + "\n\n")
 
             # References
             debut = (read.find("References"))
             substring = read[debut:]
-            fw.write(substring + "\n")
+            fw.write(substring + "\n\n")
 
             fw.close()
 
@@ -104,6 +113,15 @@ def parser():
             substring = substring[:fin]
             substring = "Introduction\n" + substring
             fw.write("<introduction>"+substring + "</introduction>\n")
+
+            # Conclusion
+            debut = (read.find("Conclusion\n"))
+            substring = read[debut:]
+            substring = substring.strip("Conclusion\n")
+            fin = (substring.find("\n\n"))
+            substring = substring[:fin]
+            substring = "Conclusion\n" + substring
+            fw.write("<conclusion>" + substring + "</conclusion>\n\n")
 
             # References
             debut = (read.find("References"))
