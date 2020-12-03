@@ -69,7 +69,15 @@ def parser():
             substring = substring.strip("Conclusion\n")
             fin = (substring.find("\n\n"))
             substring = substring[:fin]
-            substring = "Conclusion\n" + substring
+            substringCon = "Conclusion\n" + substring
+            fw.write(substringCon + "\n\n")
+
+            # Discussion
+            debut = (read.find("Conclusion"))
+            fin = (read.find("References"))
+            substring = read[debut:fin]
+            substring = substring.strip(substringCon)
+            substring = "Discussion\n" + substring
             fw.write(substring + "\n\n")
 
             # References
@@ -137,8 +145,16 @@ def parser():
             substring = substring.strip("Conclusion\n")
             fin = (substring.find("\n\n"))
             substring = substring[:fin]
-            substring = "Conclusion\n" + substring
-            fw.write("<conclusion>" + substring + "</conclusion>\n")
+            substringCon = "Conclusion\n" + substring
+            fw.write("<conclusion>" + substringCon + "</conclusion>\n")
+
+            # Discussion
+            debut = (read.find("Conclusion"))
+            fin = (read.find("References"))
+            substring = read[debut:fin]
+            substring = substring.strip(substringCon)
+            substring = "Discussion\n" + substring
+            fw.write("<discussion>" + substring + "</discussion>\n")
 
             # References
             debut = (read.find("References"))
