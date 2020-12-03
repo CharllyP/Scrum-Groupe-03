@@ -65,40 +65,6 @@ def parser():
             substring = read[debut:fin]
             fw.write(substring + "\n\n")
 
-            # Introduction
-            debut = (read.find("Introduction\n"))
-            substring = read[debut:]
-            substring = substring.strip("Introduction\n")
-            fin = (substring.find("\n\n"))
-            substring = substring[:fin]
-            substringIntro = "Introduction\n" + substring
-            fw.write(substringIntro + "\n\n")
-
-            # Corps
-            debut = (read.find("Introduction"))
-            fin = (read.find("Conclusion"))
-            substring = read[debut:fin]
-            substring = substring.strip(substringIntro)
-            substring = "Corps\n" + substring
-            fw.write(substring + "\n\n")
-
-            # Conclusion
-            debut = (read.find("Conclusion\n"))
-            substring = read[debut:]
-            substring = substring.strip("Conclusion\n")
-            fin = (substring.find("\n\n"))
-            substring = substring[:fin]
-            substringCon = "Conclusion\n" + substring
-            fw.write(substringCon + "\n\n")
-
-            # Discussion
-            debut = (read.find("Conclusion"))
-            fin = (read.find("References"))
-            substring = read[debut:fin]
-            substring = substring.strip(substringCon)
-            substring = "Discussion\n" + substring
-            fw.write(substring + "\n\n")
-
             # References
             debut = (read.find("References"))
             substring = read[debut:]
@@ -106,7 +72,46 @@ def parser():
 
             fw.close()
 
-    elif(option == "-x"):
+    elif (option == "-x"):
+        for i in listePDF:
+            toConvert = i
+            converted = i + ".txt"
+            os.system("touch " + converted)
+            command = "pdftotext " + toConvert + " " + converted
+            os.system(command)
+            fr = open(converted, "r+")
+
+            # Nom
+            iStripped = i.strip(dossierSource)
+            parsed = "ParsedPapers/" + iStripped + "Parsed.xml"
+            fw = open(parsed, 'w+')
+            fw.write("<article>\n<preamble>" + iStripped + "</preamble>\n")
+
+            # Titre
+            titre = fr.readline()
+            fw.write("<titre>" + titre + "</titre>\n")
+            read = fr.read()
+
+            # Authors
+            substring = read.lstrip(titre)
+            fin = (read.find("Abstract"))
+            substring = read[:fin]
+            fw.write("<auteur>" + substring + "</auteur>\n")
+
+            # Abstract
+            debut = (read.find("Abstract"))
+            fin = (read.find("\n\n", debut))
+            substring = read[debut:fin]
+            fw.write("<abstract>" + substring + "</abstract>\n")
+
+            # References
+            debut = (read.find("References"))
+            substring = read[debut:]
+            fw.write("<biblio>" + substring + "</biblio>\n</article>\n")
+
+            fw.close()
+
+    elif(option == "-xml"):
         for i in listePDF:
             toConvert = i
             converted = i + ".txt"
@@ -184,7 +189,7 @@ def parser():
 
 def main():
     if(len(sys.argv) != 3):
-        print("Veuillez suivre cette syntaxe: 'python3 Parser.py -(t ou x) RepertoireSource/")
+        print("Veuillez suivre cette syntaxe: 'python3 Parser.py -(t, x ou xml) RepertoireSource/")
     else:
         parser()
 
